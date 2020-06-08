@@ -30,9 +30,6 @@ public class JumpyGroof {
         CollectFood(); 
         for (int i = 0; i < kangaroolist.size(); i++) {
             Kangaroo currentKangaroo = kangaroolist.get(i);
-            System.out.println("Kangaroo " + (i+1) + 
-                    " at Point " + currentKangaroo.getCurrent_point().getPoint_ID() +
-                    " with food in pouch " + currentKangaroo.getFood_pouch());
         }
         for (int i = 0; i < kangaroolist.size(); i++) {
             Kangaroo current= kangaroolist.get(i);
@@ -50,8 +47,7 @@ public class JumpyGroof {
                 Point previous = k.getCurrent_point();
                 Point next =NextPoint(k,k.getCurrent_point());
                 if (next!=null){
-                    System.out.println("Kangaroo " +(i+1)+ " is moving from point " + previous.getPoint_ID() + " to point " + next.getPoint_ID());
-                    // set kangaroo new location
+		    // set kangaroo new location
                     k.setCurrent_point(next);
                     // change the kangaroo information at point
                     previous.removeKangaroo(k);
@@ -93,7 +89,6 @@ public class JumpyGroof {
                     }
                 }                
             }
-            System.out.println("Point " + current.getPoint_ID() + " : " + current.getfood_available());
         }
     }
     
@@ -107,10 +102,6 @@ public class JumpyGroof {
     // food left at the point after the kangaroo restore 
     public int foodleft(Kangaroo kangaroo,Point next){
         int left=next.getfood_available()-FoodNeed(kangaroo,next);
-        System.out.println(left);
-        if (left<=0){
-            left=0;
-        }
         return left;
     }
     
