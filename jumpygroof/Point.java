@@ -30,10 +30,6 @@ public class Point {
         return point_ID;
     }
 
-    public void setPoint_ID(int point_ID) {
-        this.point_ID = point_ID;
-    }
-
     public int getfood_available() {
         return food_available;
     }
@@ -50,18 +46,6 @@ public class Point {
         return kangaroos.size()==colony;
     }
 
-    public void setLimit(int limit) {
-        this.limit = limit;
-    }
-
-    public ArrayList getKangaroos() {
-        return kangaroos;
-    }
-
-    public void setKangaroos(ArrayList kangaroos) {
-       this.kangaroos=kangaroos;
-    }
-    
     public void setFemale(int female) {
         female++;
         this.female=female;
@@ -71,6 +55,10 @@ public class Point {
         return female;
     }
 
+    public ArrayList<Kangaroo> getKangaroos() {
+        return kangaroos;
+    }
+
     public void addKangaroo (Kangaroo kangaroo){
         kangaroo.setCurrent_point(this);
         if (kangaroo.getGender()=='f')
@@ -78,28 +66,8 @@ public class Point {
         kangaroos.add(kangaroo);
     }
     
-    // the kangaroo at this point will take turn to collect food to it's maximum
-    public void collectFood (){
-        if (food_available!=0){
-            for (int i=0;i<kangaroos.size();i++){
-                Kangaroo now = kangaroos.get(i);
-                if (food_available<=now.getFood_pouchMax()){
-                    // if food avalible is not enough the kangaroo will take what's available
-                    now.setFood_pouch(food_available);
-                    food_available=0;
-                }
-                else{
-                    now.setFood_pouch(now.getFood_pouchMax());
-                    food_available -= now.getFood_pouchMax();
-                }                
-            }
-        }
-    }
-
     public void removeKangaroo(Kangaroo kangaroo) {
         kangaroo.setCurrent_point(this);
         kangaroos.remove(kangaroo);
     }
-
-    
 }
