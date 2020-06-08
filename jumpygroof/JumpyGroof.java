@@ -28,15 +28,16 @@ public class JumpyGroof {
     
     public void simulation (){
         CollectFood(); 
-        for (int i = 0; i < kangaroolist.size(); i++) {
-            Kangaroo currentKangaroo = kangaroolist.get(i);
-        }
+        
+        // create a recursion until all kangaroo cant move
+        
         for (int i = 0; i < kangaroolist.size(); i++) {
             Kangaroo current= kangaroolist.get(i);
             if (!current.canMove()) 
                 break;
             Move();
         }
+        
     }
     
     // Method to move the kangaroos turn by turn
@@ -47,16 +48,16 @@ public class JumpyGroof {
                 Point previous = k.getCurrent_point();
                 Point next =NextPoint(k,k.getCurrent_point());
                 if (next!=null){
-		    // set kangaroo new location
+                    System.out.println("Kangaroo " +(i+1)+ " moved from point " + previous.getPoint_ID() + " to point " + next.getPoint_ID());
+                    // change the food information at next point
+                    setFood(k,next);
+                    // set kangaroo new location
                     k.setCurrent_point(next);
                     // change the kangaroo information at point
                     previous.removeKangaroo(k);
                     next.addKangaroo(k);
-                    // change the food information at next point
-                    int next_food=foodleft(k,next);
-                    next.setfood_available(next_food);
                     if (next.colonyFormed(colony)){
-                        System.out.println("Point " + next.getPoint_ID() + " has formed a colony");
+                        System.out.println("Point " + next.getPoint_ID() + " formed a colony");
                     }
                 }
                 else{
@@ -68,7 +69,6 @@ public class JumpyGroof {
             }
         }
     }
-   
     
     // All kangaroo including female start by collecting food into their pouch
     public void CollectFood (){
@@ -89,6 +89,7 @@ public class JumpyGroof {
                     }
                 }                
             }
+            System.out.println("Point " + current.getPoint_ID() + " : " + current.getfood_available());
         }
     }
     
@@ -101,8 +102,32 @@ public class JumpyGroof {
     
     // food left at the point after the kangaroo restore 
     public int foodleft(Kangaroo kangaroo,Point next){
-        int left=next.getfood_available()-FoodNeed(kangaroo,next);
-        return left;
+        return next.getfood_available()-FoodNeed(kangaroo,next);
+    }
+    
+    private void setFood (Kangaroo kangaroo, Point next){
+        // food left at that point
+        int foodleft=foodleft(kangaroo,next);
+        if (foodleft<=0){
+            // if food left is not enough for the kangaroo to restore energy, it will cost food pouch
+            kangaroo.setFood_pouch(kangaroo.getFood_pouch()+foodleft(kangaroo,next));
+            next.setfood_available(0);
+        }
+        else{
+            int extra = kangaroo.getFood_pouchMax()-kangaroo.getFood_pouch();
+            int pouch=kangaroo.getFood_pouch();
+            if (foodleft>=extra){
+                // if food left has more it will take the extra food to its max.
+                foodleft-=extra;
+                pouch=kangaroo.getFood_pouchMax();
+            }
+            else{
+                // if food left is not enough to full the max it wil take whats left
+                pouch = kangaroo.getFood_pouch()+foodleft;
+                foodleft=0;
+            } 
+        }
+        next.setfood_available(foodleft);
     }
     
     // if the kangaroo pass the requirement to jump the next node
@@ -111,11 +136,7 @@ public class JumpyGroof {
         return kangaroo.getFood_pouch()>=FoodNeed(kangaroo,next);
     }
 
-    // it will be forced to join the colony if it is carrying food enough for
-    // everyone as a gift and the limit of the point is not reached
-    public boolean joinColony (Kangaroo kangaroo,Point next){
-        return (FoodNeed(kangaroo,next)==next.getKangaroos().size())&&(!next.isFull());
-    }
+
 
     // choose the next point
     public Point NextPoint(Kangaroo kangaroo,Point current){
@@ -142,24 +163,30 @@ public class JumpyGroof {
                     if ( Point[ i ] > Point[ i + 1 ] )  {
                         Next=next.get(i);    
                     }
-                    if (Next.colonyFormed(colony)){
-                        if (joinColony(kangaroo,Next)){
-                            kangaroo.setMove(false);
-                             // set kangaroo new location
-                            kangaroo.setCurrent_point(Next);
-                            // change the kangaroo information at point
-                            current.removeKangaroo(kangaroo);
-                            Next.addKangaroo(kangaroo);
-                            // give food to everyone as a gift 
-                            
-                            break;
-                        }
-                    }
+                }
+            }
+            if (Next.colonyFormed(colony)){
+                if(colony(kangaroo,Next)==null){
+                    // recursion to get new node
+                    
                 }
             }            
-        }
+        } 
         return Next;
     }
     
-    
+    public Point colony (Kangaroo kangaroo,Point next){
+        // it will be forced to join the colony if it is carrying food enough for
+        // everyone as a gift and the limit of the point is not reached
+        if((FoodNeed(kangaroo,next)==next.getKangaroos().size())&& !next.isFull()){
+        // if the kangaroo can join the colony return point
+        kangaroo.setMove(false);
+            return next;
+        }
+        // if the kangaroo cant join the colony it will generate point again
+        else {
+            return null;
+        }
+    }
+
 }
