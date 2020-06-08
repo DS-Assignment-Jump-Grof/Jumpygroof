@@ -17,6 +17,7 @@ public class JumpyGroof {
     private ArrayList <Point> pointlist;
     private ArrayList <Kangaroo> kangaroolist;
     private int colony;
+    private int colony_formed=0;
 
     public JumpyGroof(Graph Map, ArrayList<Point> pointlist, ArrayList<Kangaroo> kangaroolist, int colony) {
         this.Map = Map;
@@ -38,6 +39,17 @@ public class JumpyGroof {
             Move();
         }
         
+        System.out.println("Number of colonies: "+colony_formed);
+        int remain=0;
+        for (int i = 0; i < kangaroolist.size(); i++) {
+            Kangaroo current= kangaroolist.get(i);
+            if (!current.canMove()) 
+                break;
+            remain++;
+            System.out.println("number of remaining kangaroos : "+remain);
+            System.out.println((i+1)+" "+current.getGender()+" "+current.getFood_pouch());
+        }
+        
     }
     
     // Method to move the kangaroos turn by turn
@@ -48,7 +60,7 @@ public class JumpyGroof {
                 Point previous = k.getCurrent_point();
                 Point next =NextPoint(k,k.getCurrent_point());
                 if (next!=null){
-                    System.out.println("Kangaroo " +(i+1)+ " moved from point " + previous.getPoint_ID() + " to point " + next.getPoint_ID());
+                    
                     // change the food information at next point
                     setFood(k,next);
                     // set kangaroo new location
@@ -58,7 +70,9 @@ public class JumpyGroof {
                     next.addKangaroo(k);
                     if (next.colonyFormed(colony)){
                         System.out.println("Point " + next.getPoint_ID() + " formed a colony");
+                        colony_formed++;
                     }
+                    System.out.println("Kangaroo "+(i+1)+" moved from "+previous.getPoint_ID()+" to "+next.getPoint_ID());
                 }
                 else{
                     k.setMove(false);
