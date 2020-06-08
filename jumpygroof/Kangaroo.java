@@ -5,57 +5,30 @@
  */
 package jumpygroof;
 
-import java.util.ArrayList;
 
 /**
  *
  * @author Dina
  */
 public class Kangaroo {
-    private int no_kangaroo;
-    private ArrayList kangaroo;
     private char gender;
-    private int food_pouch;
+    private int food_pouch=0;
     private int food_pouchMax;
+    private boolean move;
     private Point current_point;
 
-    public Kangaroo(char gender, int food_pouch) {
-        no_kangaroo++;
-        kangaroo = new ArrayList (no_kangaroo);
+    public Kangaroo(char gender, int food_pouchMax) {
         this.gender = gender;
-        this.food_pouchMax = food_pouch;
-    }
-
-    public int getNo_kangaroo() {
-        return no_kangaroo;
-    }
-
-    public void setNo_kangaroo(int no_kangaroo) {
-        this.no_kangaroo = no_kangaroo;
-    }
-
-    public ArrayList getKangaroo() {
-        return kangaroo;
-    }
-
-    public void setKangaroo(ArrayList kangaroo) {
-        this.kangaroo = kangaroo;
+        this.food_pouchMax = food_pouchMax;
+        move=true;
     }
 
     public char getGender() {
         return gender;
     }
-
-    public void setGender(char gender) {
-        this.gender = gender;
-    }
-
+    
     public int getFood_pouchMax() {
         return food_pouchMax;
-    }
-
-    public void setFood_pouchMax(int food_pouchMax) {
-        this.food_pouchMax = food_pouchMax;
     }
     
     public int getFood_pouch() {
@@ -73,11 +46,13 @@ public class Kangaroo {
     public void setCurrent_point(Point current_point) {
         this.current_point = current_point;
     }
-    
-    @Override
-    public String toString() {
-        return "Kangaroo{" + kangaroo + '}';
+
+    public boolean canMove() {
+        return move&&getGender()=='m';
     }
 
+    public void setMove(boolean move) {
+        this.move = move;
+    }
 
 }
