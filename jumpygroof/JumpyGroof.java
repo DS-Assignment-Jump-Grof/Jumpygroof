@@ -30,7 +30,7 @@ public class JumpyGroof {
     public void simulation (){
         CollectFood(); 
         
-        // create a recursion until all kangaroo cant move
+        // !!! create a recursion until all kangaroo cant move
         
         for (int i = 0; i < kangaroolist.size(); i++) {
             Kangaroo current= kangaroolist.get(i);
@@ -181,7 +181,7 @@ public class JumpyGroof {
             }
             if (Next.colonyFormed(colony)){
                 if(colony(kangaroo,Next)==null){
-                    // recursion to get new node
+                    // !!! recursion to get new node
                     
                 }
             }            
