@@ -30,7 +30,7 @@ public class JumpyGroof {
     public void simulation (){
         CollectFood(); 
         
-        // !!! create a recursion until all kangaroo cant move
+        // create a recursion until all kangaroo cant move
         
         for (int i = 0; i < kangaroolist.size(); i++) {
             Kangaroo current= kangaroolist.get(i);
@@ -48,8 +48,7 @@ public class JumpyGroof {
             remain++;
             System.out.println("number of remaining kangaroos : "+remain);
             System.out.println((i+1)+" "+current.getGender()+" "+current.getFood_pouch());
-        }
-        
+        }        
     }
     
     // Method to move the kangaroos turn by turn
@@ -73,9 +72,6 @@ public class JumpyGroof {
                         colony_formed++;
                     }
                     System.out.println("Kangaroo "+(i+1)+" moved from "+previous.getPoint_ID()+" to "+next.getPoint_ID());
-                }
-                else{
-                    k.setMove(false);
                 }
             }
             else{
@@ -150,8 +146,6 @@ public class JumpyGroof {
         return kangaroo.getFood_pouch()>=FoodNeed(kangaroo,next);
     }
 
-
-
     // choose the next point
     public Point NextPoint(Kangaroo kangaroo,Point current){
         // create a list of nodes
@@ -180,10 +174,7 @@ public class JumpyGroof {
                 }
             }
             if (Next.colonyFormed(colony)){
-                if(colony(kangaroo,Next)==null){
-                    // !!! recursion to get new node
-                    
-                }
+                Next=colony(kangaroo,Next);                    
             }            
         } 
         return Next;
